@@ -146,88 +146,34 @@
     }
     .leaflet-control-attribution { font-size:10px; color:#7a82a0; background:rgba(255,255,255,.78); border-radius:6px; padding:2px 6px; }
 
-    @media (max-width:720px) { .store-card { flex-direction:column; } .store-right { width:100%; flex-direction:row; justify-content:space-between; align-items:center; } }
-/* =========================
-   RWD 響應式（手機 / 平板 / 桌機）
-   ========================= */
-
-/* 手機（預設） */
-.container {
-  padding: 20px 12px;
-}
-
-.store-card {
-  flex-direction: column;
-}
-
-.store-right {
-  display: flex;
-  flex-direction: column;   /* ⭐ 變上下兩層 */
-  gap: 8px;
-  width: 100%;
-}
-
-/* 距離 → 靠左 */
-.store-distance {
-  align-self: flex-start;
-}
-
-/* 按鈕那一排 */
-.store-actions {
-  display: flex;
-  gap: 8px;
-  align-self: flex-end;     /* ⭐ 整組靠右 */
-}
-
-.store-actions .nav-btn {
-  flex: 1;   /* Maps 撐開 */
-}
-
-.store-actions .ar-btn {
-  flex: 0 0 auto;    /* 確保不撐開也不縮放 */
-  padding: 6px 6px;  /* 維持你改好的間距 */
-  min-width: 0;      /* ⭐ 強制取消可能的最小寬度限制 */
-  width: auto;       /* ⭐ 寬度隨內容自動調整 */
-}
-
-/* 平板（≥768px） */
-@media (min-width: 768px) {
-  .container {
-    padding: 28px 20px;
-  }
-
-  .store-card {
-    flex-direction: row;
-  }
-
+/* 手機版 (RWD) */
+@media (max-width: 720px) {
   .store-right {
-    flex-direction: column;
-    align-items: flex-end;
-    width: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: row;     /* 橫向排列 */
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;                /* 縮小間距，挪出空間 */
+  }
+
+  .store-actions {
+    display: flex;
+    gap: 4px;
+    flex: 0 1 auto;          /* ⭐ 允許縮小，但不強制撐開 */
+    min-width: 0;            /* ⭐ 防止被內部文字撐爆寬度 */
+  }
+
+  .store-actions .nav-btn,
+  .store-actions .ar-btn {
+    flex: 0 1 auto;          /* ⭐ 讓按鈕根據文字長度縮放，但不超過螢幕 */
+    min-width: 0;            /* ⭐ 這是防止 overflow 的關鍵 */
+    padding: 6px 8px;        /* 稍微縮小內距 */
+    white-space: nowrap;     /* 避免文字變成兩行 */
+    font-size: 13px;         /* 手機版字體縮小一點點，避免擠開框框 */
   }
 }
 
-/* 桌機（≥1024px） */
-@media (min-width: 1024px) {
-  .container {
-    max-width: 1100px;
-  }
-
-  .store-card {
-    padding: 24px;
-  }
-}
-.store-right {
-  display: flex;
-  flex-wrap: wrap;   /* ⭐ 讓按鈕可以換行 */
-  gap: 8px;
-}
-
-.nav-btn, .ar-btn {
-  flex: 1 1 auto;
-  min-width: 110px;
-  text-align: center;
-}
   </style>
 </head>
 <body>
