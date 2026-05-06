@@ -179,10 +179,14 @@
   align-self: flex-end;     /* ⭐ 整組靠右 */
 }
 
-/* 兩顆按鈕平分 */
-.store-actions .nav-btn,
+.store-actions .nav-btn {
+  flex: 1;   /* Maps 撐開 */
+}
+
 .store-actions .ar-btn {
-  white-space: nowrap;
+  flex: 0;   /* AR 不撐 */
+  font-size: 12px;
+  padding: 6px 10px;
 }
 
 /* 平板（≥768px） */
