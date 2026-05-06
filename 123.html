@@ -184,8 +184,10 @@
 }
 
 .store-actions .ar-btn {
-  flex: 0;   /* AR 不撐 */
-  padding: 6px 6px;
+  flex: 0 0 auto;    /* 確保不撐開也不縮放 */
+  padding: 6px 6px;  /* 維持你改好的間距 */
+  min-width: 0;      /* ⭐ 強制取消可能的最小寬度限制 */
+  width: auto;       /* ⭐ 寬度隨內容自動調整 */
 }
 
 /* 平板（≥768px） */
