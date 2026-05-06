@@ -146,31 +146,42 @@
     }
     .leaflet-control-attribution { font-size:10px; color:#7a82a0; background:rgba(255,255,255,.78); border-radius:6px; padding:2px 6px; }
 
-/* 手機版 (RWD) */
 @media (max-width: 720px) {
   .store-right {
     width: 100%;
     display: flex;
-    flex-direction: row;     /* 橫向排列 */
+    flex-direction: row;      /* 橫向排列 */
     justify-content: space-between;
-    align-items: center;
-    gap: 4px;                /* 縮小間距，挪出空間 */
+    align-items: center;      /* 垂直置中 */
+    gap: 10px;                /* 給地址和按鈕之間一點間距 */
   }
 
+  /* 地址/名稱區域：讓他撐開，但不准縮小到變成直的 */
+  .store-distance, 
+  .store-info { 
+    flex: 1;                  /* 佔據剩餘空間 */
+    min-width: 0;             /* 防止內容撐爆 */
+    white-space: nowrap;      /* 強制地址不換行（若要換行可刪除此行） */
+    overflow: hidden;
+    text-overflow: ellipsis;  /* 太長的話顯示三個點 */
+  }
+
+  /* 按鈕群組：固定寬度不縮放，避免被地址擠壓 */
   .store-actions {
     display: flex;
-    gap: 4px;
-    flex: 0 1 auto;          /* ⭐ 允許縮小，但不強制撐開 */
-    min-width: 0;            /* ⭐ 防止被內部文字撐爆寬度 */
+    flex-shrink: 0;           /* ⭐ 關鍵：按鈕組絕對不縮小，防止變形 */
+    gap: 6px;
   }
 
-  .store-actions .nav-btn,
+  /* 按鈕本身：調整寬度 */
+  .store-actions .nav-btn {
+    padding: 6px 12px;
+  }
+
   .store-actions .ar-btn {
-    flex: 0 1 auto;          /* ⭐ 讓按鈕根據文字長度縮放，但不超過螢幕 */
-    min-width: 0;            /* ⭐ 這是防止 overflow 的關鍵 */
-    padding: 6px 8px;        /* 稍微縮小內距 */
-    white-space: nowrap;     /* 避免文字變成兩行 */
-    font-size: 13px;         /* 手機版字體縮小一點點，避免擠開框框 */
+    padding: 6px 8px;         /* ⭐ 縮小 AR 按鈕的左右留白 */
+    width: auto;              /* 隨文字自動調整 */
+    min-width: fit-content;   /* 剛好包住文字就好 */
   }
 }
 
