@@ -146,56 +146,46 @@
     }
     .leaflet-control-attribution { font-size:10px; color:#7a82a0; background:rgba(255,255,255,.78); border-radius:6px; padding:2px 6px; }
 
-/* 手機版 (RWD) 調整 */
-@media (max-width: 600px) {
-  /* 讓卡片內容垂直排列 */
+@media (max-width: 720px) {
+  /* 1. 卡片主體改垂直排版 */
   .store-card {
     flex-direction: column;
-    gap: 12px;
     padding: 16px;
   }
 
-  /* 讓下半部區塊寬度 100% 並改為上下兩層 */
+  /* 2. 重頭戲：下半部區域改為 Flex 橫向，讓距離與按鈕左右對分 */
   .store-right {
     width: 100%;
-    flex-direction: column;
-    gap: 10px;
-    align-items: stretch; /* 讓內容撐開 */
-  }
-
-  /* 第一排：[距離大框框] 靠左，[AR 指路] 靠右 */
-  .store-right > :first-child { /* 這是距離框框 */
-    display: flex;
+    flex-direction: row !important; /* 強制橫向，左邊放距離，右邊放按鈕組 */
     justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
+    align-items: center;
+    flex-shrink: 0;
   }
 
-  /* 第二排：[Google Maps] 靠右 */
+  /* 3. 左側距離框：維持原樣不變形 */
+  .distance-stack {
+    align-self: center;
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  /* 4. 右側按鈕組：改為上下排列，並靠右對齊 */
   .store-actions {
     display: flex;
-    justify-content: flex-end; /* 按鈕整體靠右 */
-    gap: 8px;
-    width: 100%;
+    flex-direction: column; /* ⭐ 關鍵：讓按鈕變上下兩排 */
+    align-items: flex-end;  /* ⭐ 關鍵：按鈕全部靠右對齊 */
+    gap: 6px;               /* 按鈕之間的上下間距 */
+    flex: 1;                /* 佔滿剩餘空間，方便靠右 */
   }
 
-  /* 調整距離大框框內部的排列 */
-  .distance-stack {
-    align-self: flex-start; /* 距離框框靠左 */
-    padding: 6px 10px;
-    min-width: 100px;
+  /* 5. 調節按鈕寬度：解決你最在意的手機溢出與寬度問題 */
+  .store-actions .ar-btn, 
+  .store-actions .nav-btn {
+    width: auto;            /* 不要撐滿 */
+    min-width: 100px;       /* 設定最小寬度，讓兩顆按鈕看起來整齊 */
+    padding: 6px 10px;      /* 縮小內距 */
+    justify-content: center;
   }
-
-  /* 按鈕樣式微調，防止太寬 */
-  .nav-btn, .ar-btn {
-    flex: 0 1 auto; /* 不要強制撐滿，由內容決定寬度 */
-    padding: 8px 12px;
-    font-size: 13px;
-    white-space: nowrap; /* 避免文字斷行 */
-  }
-
-  /* 針對 AR 按鈕單獨設定：如果它是要放在第一排右邊 */
-  /* 如果你的 HTML 結構中 AR 按鈕在 store-actions 內，我們需要稍微調整結構的邏輯 */
 }
 
   </style>
