@@ -146,43 +146,56 @@
     }
     .leaflet-control-attribution { font-size:10px; color:#7a82a0; background:rgba(255,255,255,.78); border-radius:6px; padding:2px 6px; }
 
-@media (max-width: 720px) {
+/* 手機版 (RWD) 調整 */
+@media (max-width: 600px) {
+  /* 讓卡片內容垂直排列 */
+  .store-card {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  /* 讓下半部區塊寬度 100% 並改為上下兩層 */
   .store-right {
     width: 100%;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch; /* 讓內容撐開 */
+  }
+
+  /* 第一排：[距離大框框] 靠左，[AR 指路] 靠右 */
+  .store-right > :first-child { /* 這是距離框框 */
     display: flex;
-    flex-direction: row;      /* 橫向排列 */
     justify-content: space-between;
-    align-items: center;      /* 垂直置中 */
-    gap: 10px;                /* 給地址和按鈕之間一點間距 */
+    align-items: flex-start;
+    width: 100%;
   }
 
-  /* 地址/名稱區域：讓他撐開，但不准縮小到變成直的 */
-  .store-distance, 
-  .store-info { 
-    flex: 1;                  /* 佔據剩餘空間 */
-    min-width: 0;             /* 防止內容撐爆 */
-    white-space: nowrap;      /* 強制地址不換行（若要換行可刪除此行） */
-    overflow: hidden;
-    text-overflow: ellipsis;  /* 太長的話顯示三個點 */
-  }
-
-  /* 按鈕群組：固定寬度不縮放，避免被地址擠壓 */
+  /* 第二排：[Google Maps] 靠右 */
   .store-actions {
     display: flex;
-    flex-shrink: 0;           /* ⭐ 關鍵：按鈕組絕對不縮小，防止變形 */
-    gap: 6px;
+    justify-content: flex-end; /* 按鈕整體靠右 */
+    gap: 8px;
+    width: 100%;
   }
 
-  /* 按鈕本身：調整寬度 */
-  .store-actions .nav-btn {
-    padding: 6px 12px;
+  /* 調整距離大框框內部的排列 */
+  .distance-stack {
+    align-self: flex-start; /* 距離框框靠左 */
+    padding: 6px 10px;
+    min-width: 100px;
   }
 
-  .store-actions .ar-btn {
-    padding: 6px 8px;         /* ⭐ 縮小 AR 按鈕的左右留白 */
-    width: auto;              /* 隨文字自動調整 */
-    min-width: fit-content;   /* 剛好包住文字就好 */
+  /* 按鈕樣式微調，防止太寬 */
+  .nav-btn, .ar-btn {
+    flex: 0 1 auto; /* 不要強制撐滿，由內容決定寬度 */
+    padding: 8px 12px;
+    font-size: 13px;
+    white-space: nowrap; /* 避免文字斷行 */
   }
+
+  /* 針對 AR 按鈕單獨設定：如果它是要放在第一排右邊 */
+  /* 如果你的 HTML 結構中 AR 按鈕在 store-actions 內，我們需要稍微調整結構的邏輯 */
 }
 
   </style>
@@ -803,15 +816,16 @@ if(locationEnabled&&userLat!==null&&userLng!==null){
 }
 latestResults=results;const selectedNames=getSelectedServiceNames();const logicText=selectedNames.length>1?`已套用交集條件:${selectedNames.join('＋')} 全部都要有`:selectedNames.length===1?`已套用條件:需要 ${selectedNames[0]}`:'';const mapBox=renderMapBox(results);document.getElementById('results-area').innerHTML=`<div class="results-header"><span class="results-count">找到 <strong>${results.length}</strong> 間門市</span>${logicText?`<span style="font-size:12px;color:var(--accent2)">${escapeHtml(logicText)}</span>`:''}${locationEnabled?`<span style="font-size:12px;color:var(--accent2)">📍 依距離排序</span>`:''}</div>${mapBox}${results.map((s,i)=>{const serviceNames=[...new Set((s.store_service||[]).map(ss=>formatServiceName(ss.service?.service_name,s)).filter(Boolean))];const mapsUrl=buildGoogleMapsSearchUrl(s);const distanceBlock=buildDistanceBlock(s);return `<div class="store-card" data-store-id="${escapeHtml(s.store_id)}" onclick="focusStoreOnMap('${escapeHtml(s.store_id)}')" style="animation-delay:${i*0.04}s"><div class="store-info"><div class="store-top"><span class="brand-badge">${escapeHtml(s.brand?.brand_name||'—')}</span><span class="store-name">${escapeHtml(s.store_name||'—')}</span></div><div class="store-address">📍 ${escapeHtml(s.fullAddress||'—')}</div><div class="services">${serviceNames.length?serviceNames.map(name=>`<span class="service-tag">${escapeHtml(name)}</span>`).join(''):'<span class="service-tag">無服務標籤</span>'}</div></div>
 <div class="store-right">
-  <div class="store-distance">
-    ${distanceBlock}
+  <!-- 距離大框 -->
+  <div class="distance-stack">
+    <div>120m</div>
+    <div>2min</div>
   </div>
-
-  <div class="store-actions">
-    <button class="ar-btn">📷 AR 指路</button>
-    <a class="nav-btn">🗺 Google Maps</a>
-  </div>
-</div></div>`;}).join('')}`;setTimeout(()=>renderResultsMap(results),0);}
+  <!-- 不要用 .store-actions 包起來，直接放出來 -->
+  <button class="ar-btn">AR 指路</button>
+  <button class="nav-btn">Google Maps</button>
+</div>
+</div>`;}).join('')}`;setTimeout(()=>renderResultsMap(results),0);}
 Promise.all([loadServices(),loadBrands(),loadAreaData()]).then(()=>{updateLocationDebug();updateServiceLogicHint();});
 </script>
 <script>
