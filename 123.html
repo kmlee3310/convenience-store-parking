@@ -65,11 +65,11 @@
     .store-address { font-size:13px; color:var(--muted); margin-bottom:10px; line-height:1.5; word-break:break-all; }
     .services { display:flex; flex-wrap:wrap; gap:6px; }
     .service-tag { font-size:11px; background:#1a2e1a; color:var(--accent2); border:1px solid #2a4a2a; border-radius:5px; padding:2px 8px; }
-    .store-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; flex-shrink:0; }
+    .store-right { display:flex; flex-direction:column; align-items:stretch; gap:8px; flex-shrink:0; width:100px; }
     .store-distance { margin-top:8px; }
     .distance-badge { font-size:12px; font-family:'DM Mono',monospace; color:var(--accent2); background:#0f2a22; border:1px solid #1a4a38; border-radius:6px; padding:3px 10px; white-space:nowrap; }
     .distance-stack { display:flex; flex-direction:column; gap:3px; align-items:flex-end; font-size:12px; font-family:'DM Mono',monospace; color:var(--accent2); background:#0f2a22; border:1px solid #1a4a38; border-radius:6px; padding:5px 10px; white-space:nowrap; line-height:1.25; }
-    .nav-btn { display:flex; align-items:center; justify-content:center; gap:6px; background:transparent; border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:inherit; font-size:12px; padding:7px 10px; cursor:pointer; text-decoration:none; transition:.2s; white-space:nowrap; width:100%; }
+    .nav-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; background:transparent; border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:inherit; font-size:12px; padding:7px 12px; cursor:pointer; text-decoration:none; transition:.2s; white-space:nowrap; }
     .nav-btn:hover { border-color:var(--accent2); color:var(--accent2); }
     .map-box { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; margin-bottom:14px; }
     .map-title { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
@@ -108,7 +108,7 @@
     .loading-dots::after { content:''; animation:dots 1.2s steps(4,end) infinite; }
     @keyframes dots { 0% { content:''; } 25% { content:'.'; } 50% { content:'..'; } 75% { content:'...'; } }
 
-    .ar-btn { display:flex; align-items:center; justify-content:center; gap:6px; background:#102238; border:1px solid #2f6fe8; border-radius:8px; color:#7fb2ff; font-family:inherit; font-size:12px; padding:7px 10px; cursor:pointer; text-decoration:none; transition:.2s; white-space:nowrap; width:100%; }
+    .ar-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#102238; border:1px solid #2f6fe8; border-radius:8px; color:#7fb2ff; font-family:inherit; font-size:12px; padding:7px 12px; cursor:pointer; text-decoration:none; transition:.2s; white-space:nowrap; }
     .ar-btn:hover { border-color:var(--accent2); color:var(--accent2); }
     .ar-overlay { position:fixed; inset:0; z-index:9999; background:#000; display:none; overflow:hidden; }
     .ar-overlay.active { display:block; }
@@ -147,7 +147,7 @@
     }
     .leaflet-control-attribution { font-size:10px; color:#7a82a0; background:rgba(255,255,255,.78); border-radius:6px; padding:2px 6px; }
 
-    @media (max-width:720px) { .store-card { flex-direction:column; } .store-right { width:100%; flex-direction:row; justify-content:space-between; align-items:center; } }
+    @media (max-width:720px) { .store-card { flex-direction:row; align-items:flex-start; } .store-right { width:90px; flex-direction:column; align-items:stretch; } }
 
   </style>
 </head>
@@ -765,7 +765,7 @@ if(locationEnabled&&userLat!==null&&userLng!==null){
   renderState('⏳','<span class="loading-dots">查詢路徑距離中</span>');
   results=await enrichRoutes(results);
 }
-latestResults=results;const selectedNames=getSelectedServiceNames();const logicText=selectedNames.length>1?`已套用交集條件:${selectedNames.join('＋')} 全部都要有`:selectedNames.length===1?`已套用條件:需要 ${selectedNames[0]}`:'';const mapBox=renderMapBox(results);document.getElementById('results-area').innerHTML=`<div class="results-header"><span class="results-count">找到 <strong>${results.length}</strong> 間門市</span>${logicText?`<span style="font-size:12px;color:var(--accent2)">${escapeHtml(logicText)}</span>`:''}${locationEnabled?`<span style="font-size:12px;color:var(--accent2)">📍 依距離排序</span>`:''}</div>${mapBox}${results.map((s,i)=>{const serviceNames=[...new Set((s.store_service||[]).map(ss=>formatServiceName(ss.service?.service_name,s)).filter(Boolean))];const mapsUrl=buildGoogleMapsSearchUrl(s);const distanceBlock=buildDistanceBlock(s);return `<div class="store-card" data-store-id="${escapeHtml(s.store_id)}" onclick="focusStoreOnMap('${escapeHtml(s.store_id)}')" style="animation-delay:${i*0.04}s"><div class="store-info"><div class="store-top"><span class="brand-badge">${escapeHtml(s.brand?.brand_name||'—')}</span><span class="store-name">${escapeHtml(s.store_name||'—')}</span></div><div class="store-address">📍 ${escapeHtml(s.fullAddress||'—')}</div><div class="services">${serviceNames.length?serviceNames.map(name=>`<span class="service-tag">${escapeHtml(name)}</span>`).join(''):'<span class="service-tag">無服務標籤</span>'}</div><div class="store-distance">${distanceBlock}</div></div><div class="store-right"><button class="ar-btn" onclick="event.stopPropagation(); openARByStoreId('${escapeHtml(s.store_id)}')">📷 AR 指路</button><a class="nav-btn" href="${mapsUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">🗺 Google Maps</a></div></div>`;}).join('')}`;setTimeout(()=>renderResultsMap(results),0);}
+latestResults=results;const selectedNames=getSelectedServiceNames();const logicText=selectedNames.length>1?`已套用交集條件:${selectedNames.join('＋')} 全部都要有`:selectedNames.length===1?`已套用條件:需要 ${selectedNames[0]}`:'';const mapBox=renderMapBox(results);document.getElementById('results-area').innerHTML=`<div class="results-header"><span class="results-count">找到 <strong>${results.length}</strong> 間門市</span>${logicText?`<span style="font-size:12px;color:var(--accent2)">${escapeHtml(logicText)}</span>`:''}${locationEnabled?`<span style="font-size:12px;color:var(--accent2)">📍 依距離排序</span>`:''}</div>${mapBox}${results.map((s,i)=>{const serviceNames=[...new Set((s.store_service||[]).map(ss=>formatServiceName(ss.service?.service_name,s)).filter(Boolean))];const mapsUrl=buildGoogleMapsSearchUrl(s);const distanceBlock=buildDistanceBlock(s);return `<div class="store-card" data-store-id="${escapeHtml(s.store_id)}" onclick="focusStoreOnMap('${escapeHtml(s.store_id)}')" style="animation-delay:${i*0.04}s"><div class="store-info"><div class="store-top"><span class="brand-badge">${escapeHtml(s.brand?.brand_name||'—')}</span><span class="store-name">${escapeHtml(s.store_name||'—')}</span></div><div class="store-address">📍 ${escapeHtml(s.fullAddress||'—')}</div><div class="services">${serviceNames.length?serviceNames.map(name=>`<span class="service-tag">${escapeHtml(name)}</span>`).join(''):'<span class="service-tag">無服務標籤</span>'}</div></div><div class="store-right">${distanceBlock}<button class="ar-btn" onclick="event.stopPropagation(); openARByStoreId('${escapeHtml(s.store_id)}')">📷 AR 指路</button><a class="nav-btn" href="${mapsUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">🗺 Google Maps</a></div></div>`;}).join('')}`;setTimeout(()=>renderResultsMap(results),0);}
 Promise.all([loadServices(),loadBrands(),loadAreaData()]).then(()=>{updateLocationDebug();updateServiceLogicHint();});
 </script>
 <script>
