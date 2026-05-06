@@ -161,9 +161,23 @@
 }
 
 .store-right {
+  display: flex;
+  flex-direction: column;   /* ⭐ 變上下兩層 */
+  gap: 8px;
   width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
+}
+
+/* 按鈕那一排 */
+.store-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* 兩顆按鈕平分 */
+.store-actions .nav-btn,
+.store-actions .ar-btn {
+  flex: 1;
+  text-align: center;
 }
 
 /* 平板（≥768px） */
@@ -820,7 +834,14 @@ if(locationEnabled&&userLat!==null&&userLng!==null){
   renderState('⏳','<span class="loading-dots">查詢路徑距離中</span>');
   results=await enrichRoutes(results);
 }
-latestResults=results;const selectedNames=getSelectedServiceNames();const logicText=selectedNames.length>1?`已套用交集條件:${selectedNames.join('＋')} 全部都要有`:selectedNames.length===1?`已套用條件:需要 ${selectedNames[0]}`:'';const mapBox=renderMapBox(results);document.getElementById('results-area').innerHTML=`<div class="results-header"><span class="results-count">找到 <strong>${results.length}</strong> 間門市</span>${logicText?`<span style="font-size:12px;color:var(--accent2)">${escapeHtml(logicText)}</span>`:''}${locationEnabled?`<span style="font-size:12px;color:var(--accent2)">📍 依距離排序</span>`:''}</div>${mapBox}${results.map((s,i)=>{const serviceNames=[...new Set((s.store_service||[]).map(ss=>formatServiceName(ss.service?.service_name,s)).filter(Boolean))];const mapsUrl=buildGoogleMapsSearchUrl(s);const distanceBlock=buildDistanceBlock(s);return `<div class="store-card" data-store-id="${escapeHtml(s.store_id)}" onclick="focusStoreOnMap('${escapeHtml(s.store_id)}')" style="animation-delay:${i*0.04}s"><div class="store-info"><div class="store-top"><span class="brand-badge">${escapeHtml(s.brand?.brand_name||'—')}</span><span class="store-name">${escapeHtml(s.store_name||'—')}</span></div><div class="store-address">📍 ${escapeHtml(s.fullAddress||'—')}</div><div class="services">${serviceNames.length?serviceNames.map(name=>`<span class="service-tag">${escapeHtml(name)}</span>`).join(''):'<span class="service-tag">無服務標籤</span>'}</div></div><div class="store-right">${distanceBlock}<button class="ar-btn" onclick="event.stopPropagation(); openARByStoreId('${escapeHtml(s.store_id)}')">📷 AR 指路</button><a class="nav-btn" href="${mapsUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">🗺 Google Maps</a></div></div>`;}).join('')}`;setTimeout(()=>renderResultsMap(results),0);}
+latestResults=results;const selectedNames=getSelectedServiceNames();const logicText=selectedNames.length>1?`已套用交集條件:${selectedNames.join('＋')} 全部都要有`:selectedNames.length===1?`已套用條件:需要 ${selectedNames[0]}`:'';const mapBox=renderMapBox(results);document.getElementById('results-area').innerHTML=`<div class="results-header"><span class="results-count">找到 <strong>${results.length}</strong> 間門市</span>${logicText?`<span style="font-size:12px;color:var(--accent2)">${escapeHtml(logicText)}</span>`:''}${locationEnabled?`<span style="font-size:12px;color:var(--accent2)">📍 依距離排序</span>`:''}</div>${mapBox}${results.map((s,i)=>{const serviceNames=[...new Set((s.store_service||[]).map(ss=>formatServiceName(ss.service?.service_name,s)).filter(Boolean))];const mapsUrl=buildGoogleMapsSearchUrl(s);const distanceBlock=buildDistanceBlock(s);return `<div class="store-card" data-store-id="${escapeHtml(s.store_id)}" onclick="focusStoreOnMap('${escapeHtml(s.store_id)}')" style="animation-delay:${i*0.04}s"><div class="store-info"><div class="store-top"><span class="brand-badge">${escapeHtml(s.brand?.brand_name||'—')}</span><span class="store-name">${escapeHtml(s.store_name||'—')}</span></div><div class="store-address">📍 ${escapeHtml(s.fullAddress||'—')}</div><div class="services">${serviceNames.length?serviceNames.map(name=>`<span class="service-tag">${escapeHtml(name)}</span>`).join(''):'<span class="service-tag">無服務標籤</span>'}</div></div><div class="store-right">
+  ${distanceBlock}
+
+  <div class="store-actions">
+    <button class="ar-btn">📷 AR 指路</button>
+    <a class="nav-btn">🗺 Google Maps</a>
+  </div>
+</div></div>`;}).join('')}`;setTimeout(()=>renderResultsMap(results),0);}
 Promise.all([loadServices(),loadBrands(),loadAreaData()]).then(()=>{updateLocationDebug();updateServiceLogicHint();});
 </script>
 <script>
