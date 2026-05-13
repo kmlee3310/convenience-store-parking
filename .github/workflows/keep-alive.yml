@@ -13,5 +13,5 @@ jobs:
       - name: Send API Request to Supabase
         run: |
           curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/" \
-          -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
-          -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
+          -H "apikey:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2d3VmemV3bHBiZXp5bGFuZWR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MzM4NDYsImV4cCI6MjA5MzQwOTg0Nn0.Q7EZ-EWWR7Sv2b6ca0gQ0DxhFOga2buVjK8IKTvlwbo" \
+          -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2d3VmemV3bHBiZXp5bGFuZWR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MzM4NDYsImV4cCI6MjA5MzQwOTg0Nn0.Q7EZ-EWWR7Sv2b6ca0gQ0DxhFOga2buVjK8IKTvlwbo"
