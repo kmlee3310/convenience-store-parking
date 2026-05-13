@@ -9,8 +9,6 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Send API Request to Supabase Auth
+      - name: Send API Request to Supabase Edge
         run: |
-          curl -X POST "supabase.co" \
-          -H "Content-Type: application/json" \
-          -d '{"email": "ping@example.com", "password": "dont-care-password"}'
+          curl -i -X GET "supabase.co"
