@@ -744,7 +744,9 @@ function getSortCoordinate(store){
 }
 
 async function fetchAllStores(queryBuilder,pageSize=1000){let from=0, allRows=[];while(true){const {data,error}=await queryBuilder.range(from,from+pageSize-1);if(error)throw error;if(!data||!data.length)break;allRows=allRows.concat(data);if(data.length<pageSize)break;from+=pageSize;}return allRows;}
-async function search(){const serviceIds=getSelectedServices();const brandId=document.getElementById('brand-select').value;const limitCount=parseInt(document.getElementById('limit-select').value,10);if(!serviceIds.length){alert('請至少勾選一個服務項目');return;}renderState('⏳','<span class="loading-dots">查詢中</span>');let query=client.from('store').select(`
+async function search(){const serviceIds=getSelectedServices();const brandId=document.getElementById('brand-select').value;const parsed = parseInt(document.getElementById('limit-select').value, 10);
+const ALLOWED_LIMITS = [10, 30, 50];
+const limitCount = ALLOWED_LIMITS.includes(parsed) ? parsed : 20;if(!serviceIds.length){alert('請至少勾選一個服務項目');return;}renderState('⏳','<span class="loading-dots">查詢中</span>');let query=client.from('store').select(`
   store_id, store_name, store_location, store_latitude, store_longitude, town_id, brand_id,
   brand:brand_id ( brand_id, brand_name ),
   town:town_id ( town_name, city:city_id ( city_name ) ),
