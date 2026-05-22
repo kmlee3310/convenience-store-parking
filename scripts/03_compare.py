@@ -219,7 +219,8 @@ def write_summary(to_insert, to_update, to_delete, svc_insert, svc_delete, db_st
         lines.append("| store_id | 門市資訊 |")
         lines.append("|----------|----------|")
         for r in svc_insert[:50]:
-            lines.append(f"| {r['store_id']} | {id_info.get(r['store_id'], f\"store_id={r['store_id']}\")} |")
+          fallback = f"store_id={r['store_id']}"
+          lines.append(f"| {r['store_id']} | {id_info.get(r['store_id'], fallback)} |")
         if len(svc_insert) > 50:
             lines.append(f"\n> ⚠️ 僅顯示前 50 筆，共 {len(svc_insert)} 筆")
         lines.append("")
@@ -229,7 +230,8 @@ def write_summary(to_insert, to_update, to_delete, svc_insert, svc_delete, db_st
         lines.append("| store_id | 門市資訊 |")
         lines.append("|----------|----------|")
         for r in svc_delete[:50]:
-            lines.append(f"| {r['store_id']} | {id_info.get(r['store_id'], f\"store_id={r['store_id']}\")} |")
+          fallback = f"store_id={r['store_id']}"
+          lines.append(f"| {r['store_id']} | {id_info.get(r['store_id'], fallback)} |")
         if len(svc_delete) > 50:
             lines.append(f"\n> ⚠️ 僅顯示前 50 筆，共 {len(svc_delete)} 筆")
         lines.append("")
