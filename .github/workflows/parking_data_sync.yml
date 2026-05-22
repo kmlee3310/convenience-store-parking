@@ -2,8 +2,8 @@ name: Parking Store Sync with Approval Flow
 
 on:
   schedule:
-    - cron: '0 1 * * *'   # 每天凌晨 1:00 UTC（台灣時間早上 9:00）
-  workflow_dispatch:
+    - cron: '0 1 1 * *'   # 每月 1 號凌晨 1:00 UTC
+  workflow_dispatch:        # 手動觸發
 
 jobs:
   # ============================================================
