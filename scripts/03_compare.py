@@ -24,7 +24,7 @@ SERVICE_MAP  = {1: "停車場"}          # service_id → 中文名稱
 SERVICE_COL  = {"parking": 1}         # CSV 欄位 → service_id（只有這一個）
 BRAND_NAME   = {1: "7-ELEVEN"}
 
-UPDATE_COLS = ["town_id", "official_id", "store_name", "store_location"]
+UPDATE_COLS = ["town_id", "store_location"]
 
 os.makedirs(PAYLOAD_DIR, exist_ok=True)
 
