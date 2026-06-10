@@ -3,7 +3,7 @@ name: Supabase Keep Alive
 on:
   schedule:
     # 每 15 分鐘執行一次
-    - cron: '15 * * * *'
+    - cron: '28 * * * *'
   workflow_dispatch: # 允許您在 GitHub 頁面上手動觸發測試
 
 jobs:
